@@ -13,6 +13,7 @@ int inserted = 0;
 
 void insert (char val, struct Node *t){
   if(strchr(operands, t -> val)){
+    printf("Where to go?\n");
     if(t -> left == 0){
       printf("Trying to insert %c to the LEFT of %c\n", val, t->val);
       struct Node *temp = (struct Node *) malloc( sizeof (struct Node));
@@ -21,8 +22,10 @@ void insert (char val, struct Node *t){
       temp -> val = val;
       t -> left = temp;
       inserted = 1;
+    }else if(t -> left != 0 && strchr (operands, t -> left -> val)){
+      insert(val, t -> left);
     }
-    else if(t -> left != 0 && strchr (operands, t -> left -> val)){
+    if (t -> right == 0 && !inserted) {
       printf("Trying to insert %c to the RIGHT of %c\n", val, t->val);
       struct Node *temp = (struct Node *) malloc( sizeof (struct Node));
       temp -> left = 0;
@@ -30,31 +33,10 @@ void insert (char val, struct Node *t){
       temp -> val = val;
       t -> right = temp;
       inserted = 1;
-    }else{
-      insert(val, t -> left);
-      if(!inserted){
-        insert(val, t -> right);
-      }
+    }else if(t -> right != 0 && strchr (operands, t -> right -> val)){
+      insert(val, t -> right);
     }
   }
-  // }else{
-  //   if(t -> left == 0){
-  //     printf("Trying to insert %c to the LEFT of %c\n", val, t->val);
-  //     struct Node *temp = (struct Node *) malloc( sizeof (struct Node));
-  //     temp -> left = 0;
-  //     temp -> right = 0;
-  //     temp -> val = val;
-  //     t -> left = temp;
-  //   }
-  //   else if(t -> right == 0){
-  //     printf("Trying to insert %c to the RIGHT of %c\n", val, t->val);
-  //     struct Node *temp = (struct Node *) malloc( sizeof (struct Node));
-  //     temp -> left = 0;
-  //     temp -> right = 0;
-  //     temp -> val = val;
-  //     t -> right = temp;
-  //   }
-  // }
 }
 
 void printNodes(struct Node *t){
