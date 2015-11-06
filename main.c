@@ -45,6 +45,38 @@ void printNodes(struct Node *t){
   printf("%c\n",t->val);
 }
 
+int level = 0;
+void evalNodes(struct Node *t){
+  if (strchr(operands, t -> right -> val)) {
+    level++;
+    evalNodes(t -> right);
+  }else{
+    printf("L %c\n", t-> right -> val);
+    char inst;
+    switch (t -> val) {
+      case '+':
+        inst = 'A'; break;
+      case '-':
+        inst = 'S'; break;
+      case '*':
+        inst = 'M'; break;
+      case '/':
+        inst = 'D'; break;
+      case '%':
+        inst = 'R'; break;
+    }
+    printf("%c %c\n",inst, t -> left -> val );
+    printf("ST $%c\n", level+'0');
+    level--;
+  }
+  if (strchr(operands, t -> left -> val)) {
+    level++;
+    evalNodes(t -> left);
+    level--;
+  }
+
+}
+
 int main(int argc, char const *argv[]) {
   if(argc < 2){
     printf("No code to generate.\n");
@@ -80,6 +112,8 @@ int main(int argc, char const *argv[]) {
     insert(code[i], root);
   }
   printNodes(root);
+
+  evalNodes(root);
 
   return 0;
 }
